@@ -2,7 +2,6 @@
 project(lua-cjson C)
 cmake_minimum_required(VERSION 3.0)
 
-option(LUA_CJSON_STATIC_LIB "Build as a static library" OFF)
 
 # Use libc number conversion routines (strtod(), sprintf())
 set(FPCONV_SOURCES fpconv.c)
@@ -33,5 +32,8 @@ if(MSVC)
 	add_definitions(-Dstrncasecmp=_strnicmp)
 endif()
 
-add_library(cjson STATIC lua_cjson.c strbuf.c ${FPCONV_SOURCES})
+add_library(cjson-static STATIC lua_cjson.c strbuf.c ${FPCONV_SOURCES})
+target_link_libraries(cjson-static lua-static)
+
+add_library(cjson SHARED lua_cjson.c strbuf.c ${FPCONV_SOURCES})
 target_link_libraries(cjson lua)
